@@ -1,0 +1,5 @@
+# 기본적으로 yolov5s 또는 yolov5m 까지가 realtime을 유지할 수 있는 방법이다.
+#yolov5s : FPS 30
+#yolov5m : FPS 14.5
+
+#사실상 SORT가 영상 처리 시간에 영향을 미치지 않는다.
