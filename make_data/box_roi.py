@@ -1,3 +1,7 @@
+'''
+setdata.yaml에 cctv_num의 이름으로 ROI값들이 저장됨
+'''
+
 import glob
 import cv2
 import yaml
@@ -10,7 +14,7 @@ name_add = 'CCTV_B2_ADD_'
 #path = '/mnt/c/Users/tom41/OneDrive/Desktop/output_b2/0' + str(count) + '.jpg'
 path = '/mnt/c/Users/tom41/OneDrive/Desktop/cctv_b2/' + str(count) + '.jpg'
 
-with open('setdata_office_b2.yaml', 'r') as f:
+with open('setdata.yaml', 'r') as f:
     data1 = yaml.safe_load(f)
 
 isdraw = False
@@ -118,6 +122,6 @@ for img in sorted(glob.glob(path)):
         
 
 #  yaml 파일 출력
-with open('setdata_office_b2.yaml', 'w') as file:
+with open('setdata.yaml', 'w') as file:
     yaml.dump(data1, file, default_flow_style=False)
     yaml.dump(data, file, default_flow_style=False)
