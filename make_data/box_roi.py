@@ -39,26 +39,6 @@ def yamlset():
     data[cctv_num]["roi"] = []
     print(cctv_num + ":\n crop_size: []\n pos:\n road: \n roi:")
 
-    '''
-    if count < 10:
-        cctv_num = "WEBCAM0" + str(count)
-        data[cctv_num] = {}
-        data[cctv_num]["crop_size"] = []
-        data[cctv_num]["pos"] = []
-        data[cctv_num]["road"] = 0
-        data[cctv_num]["roi"] = []
-        print(cctv_num + ":\n crop_size: []\n pos:\n road: \n roi:")
-    else:
-        cctv_num = "CCCTV" + str(count)
-        data[cctv_num] = {}
-        data[cctv_num]["crop_size"] = []
-        data[cctv_num]["pos"] = []
-        data[cctv_num]["road"] = 0
-        data[cctv_num]["roi"] = []
-        print(cctv_num + ":\n crop_size: []\n pos:\n road: \n roi:")
-
-    count+=1
-'''
 
 def clickcallback(event, x, y, flags, param):
     global isdraw

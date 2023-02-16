@@ -18,6 +18,29 @@ def get_uuid(config, site):
     #     yaml.dump(total_state, f, default_style=False)
 
     result = {}  # init result
+    """
+    # without double_rois & double_slots
+    for key, value in get_pos.items():
+        result[key] = value
+        roi = []
+        #print(key)
+        for i in value['roi']:
+            roi.append(str(i))
+        
+        result[key]['roi'] = roi
+        uuid_list = []
+        for idx in value['pos']:
+            
+            for slot in total_state:
+                if slot['slot_name'] in idx:
+                    uuid_list.append(slot['uuid'])
+                    break
+
+        #result['uuid'] = uuid_list
+        result[key]['uuid'] = uuid_list
+    return_yaml('result_add_ip.yaml', result)
+
+    """
     
     for key, value in get_pos.items():
         result[key] = value
