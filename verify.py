@@ -1,3 +1,8 @@
+'''
+In runfinal.py line 138;
+Make final_state which comes out more of 'free' or 'in'
+Value num determine the number of votes 
+'''
 from utils.general import LOGGER
 
 
@@ -6,13 +11,14 @@ def verify(cam, cam_seq, state, num=5):
         num -= 1
 
     state[cam_seq].append(list(cam['state'].values()))  # 각 카메라 별 주차 상태 리스트 요소 추가
+    # 개수가 num개 넘어가면 가장 오래된 거 삭제
     if len(state[cam_seq]) > num:
         state[cam_seq].popleft()
     # LOGGER.info(f'{cam_seq} - Verifying parking state : {state[cam_seq]}')
 
-    if len(state[cam_seq]) == num:  # 동일 카메라에 대해 5번 영상분석을 수행했을 때
+    if len(state[cam_seq]) == num:  # 동일 카메라에 대해 num번 영상분석을 수행했을 때
         verify_state = [list() * len(cam['state']) for x in range(len(cam['state']))]
-        for i in range(len(state[cam_seq][0])):  # 각 주차면 별 주차 상태를 리스트로 저장
+        for i in range(len(state[cam_seq][0])):  # 각 주차면 별 주차 상태를 리스트(verify_state)로 저장
             for j in range(num):
                 verify_state[i].append(state[cam_seq][j][i])
 
