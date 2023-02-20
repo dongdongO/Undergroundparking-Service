@@ -135,6 +135,7 @@ def occupancy_inout(img, b_lines, cam):
     return inouts
 
 
+# 이거 안씀 폐기
 def find_intersection(img, trajectories, cam, cam_seq):
     """객체 추적 알고리즘을 이용한 주차선 통과 여부 판단
     Args:
@@ -183,6 +184,7 @@ def find_intersection(img, trajectories, cam, cam_seq):
     return inouts, isintersects
 
 
+# 이거 안씀 폐기
 def trace_inout(borderline, trace, inouts, slot_id, road):
     """객체 추적 알고리즘을 이용한 주차 점유 판단
     Args:
