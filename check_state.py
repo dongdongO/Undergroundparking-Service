@@ -12,40 +12,43 @@ def inout(img, cam, bboxes, road):
     """인식된 차량의 bounding box와 설정한 ROI box로 주차 점유여부 판단
     Args:
         img      (ndarray): 원본 이미지
-        cam         (dict): 한 카메라 설정 정보 (rtsp url, road, uuid, slot_id, roi)
+        cam         (dict): 한 카메라 설정 정보 (double_rois, double_slots, pos, road, roi, src, uuid)
         bboxes      (list): Yolov5가 인식한 차량의 bounding box 좌표 리스트 (xyxy)
-        road         (int): 도로의 x 좌표 (수직선)
+        road         (int): 도로의 x 좌표 (수직선) -> 차량의 우측좌측 기준 담당
 
     Returns:
-        dict: 한 카메라에 대한 각 주차면의 점유 상태 딕셔너리 (예: {'1-x2-y3-1': 'free', '1-x2-y3-2': 'in'})
+        inouts: 한 카메라에 대한 각 주차면의 점유 상태 딕셔너리 (예: {'1-x2-y3-1': 'free', '1-x2-y3-2': 'in'})
     """
     inouts = dict()  # 각 주차면별 점유 상태 딕셔너리
 
     for idx, slot_id in enumerate(cam['pos']):
-        roi = cam['roi'][idx]
-        cv2.rectangle(img, (roi[0], roi[1]), (roi[2], roi[3]), GREEN, 1)  # display ROI
+        roi = cam['roi'][idx]   # 해당 pos에 대한 roi list값
+        cv2.rectangle(img, (roi[0], roi[1]), (roi[2], roi[3]), GREEN, 1)  # roi 초록박스로 그리기
         if not bboxes:
             # 카메라 내 인식된 차량이 한 대도 없을 때
             inouts[slot_id] = 'free'
         else:
             # 카메라 내 인식된 차량이 한 대 이상일 때
             for bbox in bboxes:
-                is_left = (bbox[0] + bbox[2]) / 2 < road  # 차량의 bounding box가 도로 기준으로 좌측에 있는지 확인
+                is_left = (bbox[0] + bbox[2]) / 2 < road  # 차량의 bounding box 중점이 도로 기준으로 좌측에 있는지 확인
                 is_y_inside = roi[1] < bbox[3] < roi[3]  # 차량의 bounding box의 y좌표가 ROI 내부에 포함되는지 확인
-                is_x_right_inside, is_x_left_inside = roi[0] < bbox[2] < roi[2], roi[0] < bbox[0] < roi[2]
-                if is_left and is_y_inside and is_x_right_inside:
+                is_x_right_inside, is_x_left_inside = roi[0] < bbox[2] < roi[2], roi[0] < bbox[0] < roi[2] # 차량이 좌,우측에 있을 조건
+                if is_left and is_y_inside and is_x_right_inside:   # 차량이 왼쪽에 있고 우측 하단점의 x,y 좌표가 roi안에 있다면
                     # 차량이 도로 좌측에 주차된 경우 bounding box의 우측 하단점 기준으로 점유 판단
-                    cv2.rectangle(img, (roi[0], roi[1]), (roi[2], roi[3]), YELLOW, 1)  # 점유된 주차면의 ROI는 노란색으로 표시
+                    cv2.rectangle(img, (roi[0], roi[1]), (roi[2], roi[3]), YELLOW, 1)  # 점유된 주차면의 ROI는 노란색 박스
                     inouts[slot_id] = 'in'
                     break
-                elif not is_left and is_y_inside and is_x_left_inside:
+                elif not is_left and is_y_inside and is_x_left_inside:  # 차량이 우측에 있고 좌측 하단점의 x,y 좌표가 roi안에 있다면
                     # 차량이 도로 우측에 주차된 경우 bounding box의 좌측 하단점 기준으로 점유 판단
-                    cv2.rectangle(img, (roi[0], roi[1]), (roi[2], roi[3]), YELLOW, 1)  # 점유된 주차면의 ROI는 노란색으로 표시
+                    cv2.rectangle(img, (roi[0], roi[1]), (roi[2], roi[3]), YELLOW, 1)  # 점유된 주차면의 ROI는 노란색 박스
                     inouts[slot_id] = 'in'
                     break
                 else:
+                    # 점유된 차가 없다면 원상태의 초록색 박스
                     cv2.rectangle(img, (roi[0], roi[1]), (roi[2], roi[3]), GREEN, 1)
                     inouts[slot_id] = 'free'
+    
+    # 결과값이 run_final.py 에서 cam['state']에 저장
     return inouts
 
 
@@ -53,12 +56,14 @@ def double_inout(img, cam, bboxes, road):
     """인식된 차량의 bounding box와 설정한 ROI box로 이중주차 여부 판단
     Args:
         img      (ndarray): 원본 이미지
-        cam         (dict): 한 카메라 설정 정보 (rtsp url, road, uuid, slot_id, roi)
+        cam         (dict): 한 카메라 설정 정보 (double_rois, double_slots, pos, road, roi, src, uuid)
         bboxes      (list): Yolov5가 인식한 차량의 bounding box 좌표 리스트 (xyxy)
-        road         (int): 도로의 x 좌표 (수직선)
+        road         (int): 도로의 x 좌표 (수직선) -> 차량의 우측좌측 기준 담당
 
     Returns:
         dict: 한 카메라에 대한 각 주차면의 점유 상태 딕셔너리 (예: {'1-x2-y3-1': 'free', '1-x2-y3-2': 'in'})
+    
+    => inout과 같지만 '이중주차로 영향을 받는 기존의 주차면은 모두 점유된 것으로 강제 처리' 추가
     """
     for idx, double_roi in enumerate(cam['double_rois']):
         if not bboxes:
