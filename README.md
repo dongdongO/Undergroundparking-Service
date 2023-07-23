@@ -35,9 +35,6 @@
 - Reboot every 2 hours
 
 
-# License
-
-
 ## Code, Library
 - TensorFlow
     - https://github.com/tensorflow/tensorflow
