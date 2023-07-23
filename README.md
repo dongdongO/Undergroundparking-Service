@@ -56,5 +56,6 @@
     - Copyright (c) Megvii, Inc. and its affiliates. All Rights Reserved
     - Licensed under the GNU Affero General Public License v3.0
 - StrongOSORT
-    - 
-
+    - https://github.com/mikel-brostrom/yolo_tracking
+    - Copyright (C) 2007 Free Software Foundation
+    - Licensed under the GNU Affero General Public License v3.0
