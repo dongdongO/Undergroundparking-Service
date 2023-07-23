@@ -1,35 +1,21 @@
-https://user-images.githubusercontent.com/11009876/132947317-3c839522-b347-4a8d-8675-3999adf9cdb6.mp4
 
-# Self-Driving-ish Computer Vision System
-- This project generates images you've probably seen in autonomous driving demo
+# Underground-Parking-Service
+- This project is to make parkinglot service using camera. 이것은 센서로 주차상황을 파악하는 것과는 다르게 이중주차의 상태까지 판단이 가능하게 한다
 - Detection
-    - Object Detection and Tracking
-    - Lane Detection and Curve Fitting
-    - Road Segmentation
-    - Depth Estimation
-- Transform using Projective Geometry and Pinhole Camera Model
-    - Normal View -> Top View
-    - Distance Calculation (image plane -> ground plane in world coordinate system)
+    - Object detection by yolov5
+    - Tracking by opencv
+- 데이터 전송
+    - Mqtt
+
 
 ## Result
-- YoutTube: https://youtu.be/GB4p_fjQZNE
-
-![result](00_doc/result.jpg)
-
+- 주차장 사진 & tracking gif 영상
 
 # Tested Environment
-## Computer
-- Windows 10 (x64) + Visual Studio 2019
-    - Intel Core i7-6700 @ 3.4GHz + NVIDIA GeForce GTX 1070
-- Jetson Xavier NX. JetPack 4.6
-    - You will get error if using JetPack 4.5 or before because of TensorRT error
-
-## Deep Learning Inference Framework
-- TensorFlow Lite with XNNPACK delegate
-    - CPU
-    - Note: Running with CPU is very slow
-- TensorRT
-    - GPU
+## Computer Server
+- Linux & Vi editor
+    - Intel Core i7-6700 @ 3.4GHz + NVIDIA GeForce GTX 2060 * 3
+    - 하나의 서버당 200개가 넘는 카메라 담당
 
 # Usage
 ```
